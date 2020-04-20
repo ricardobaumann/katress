@@ -46,6 +46,7 @@ dependencies {
     compile group: 'com.zaxxer', name: 'HikariCP', version: '3.2.0'
     compile 'org.jetbrains.exposed:exposed:0.17.6'
     runtime group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.3.3'
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
 }
 

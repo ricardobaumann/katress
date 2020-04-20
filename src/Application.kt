@@ -17,8 +17,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
-    initDB()
+fun Application.module(addressController: AddressController = AddressController()) {
     install(CORS) {
         method(HttpMethod.Options)
         method(HttpMethod.Put)
@@ -53,10 +52,10 @@ fun Application.module(testing: Boolean = false) {
         }
 
         install(StatusPages) {
-            exception<AuthenticationException> { cause ->
+            exception<AuthenticationException> { _ ->
                 call.respond(HttpStatusCode.Unauthorized)
             }
-            exception<AuthorizationException> { cause ->
+            exception<AuthorizationException> { _ ->
                 call.respond(HttpStatusCode.Forbidden)
             }
 
@@ -68,12 +67,6 @@ fun Application.module(testing: Boolean = false) {
                 call.respondText("Hello ${principal.name}")
             }
         }
-
-        get("/json/jackson") {
-            call.respond(mapOf("hello" to "world"))
-        }
-
-        val addressController = AddressController()
 
         get("/addresses") {
             call.respond(addressController.getAll())
@@ -90,13 +83,6 @@ fun Application.module(testing: Boolean = false) {
             } ?: call.respond(HttpStatusCode.NotFound)
         }
     }
-}
-
-fun initDB() {
-    val config = HikariConfig("/hikari.properties")
-    config.schema = "public"
-    val ds = HikariDataSource(config)
-    Database.connect(ds)
 }
 
 class AuthenticationException : RuntimeException()

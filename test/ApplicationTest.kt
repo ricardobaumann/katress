@@ -11,11 +11,14 @@ import com.fasterxml.jackson.databind.*
 import io.ktor.jackson.*
 import kotlin.test.*
 import io.ktor.server.testing.*
+import org.mockito.Mockito
 
 class ApplicationTest {
+    private val addressController = Mockito.mock(AddressController::class.java)
+
     @Test
     fun testRoot() {
-        withTestApplication({ module(testing = true) }) {
+        withTestApplication({ module(addressController = addressController) }) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 assertEquals("HELLO WORLD!", response.content)
