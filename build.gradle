@@ -6,6 +6,8 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
     }
 }
 
@@ -15,6 +17,12 @@ apply plugin: 'application'
 mainClassName = "io.ktor.server.netty.EngineMain"
 
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "kotlin-allopen"
+apply plugin: "kotlin-noarg"
+
+allOpen {
+    annotation("com.github.ricardobaumann.Open")
+}
 
 group 'com.github.ricardobaumann'
 version '0.0.1'

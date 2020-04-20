@@ -9,7 +9,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
-open class AddressController {
+@Open
+class AddressController {
 
     init {
         val config = HikariConfig("/hikari.properties")
