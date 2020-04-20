@@ -50,4 +50,39 @@ class ApplicationTest {
             }
         }
     }
+
+    @Test
+    fun testPostAddressSuccess() {
+        val addressCreateCommand = AddressCreateCommand(
+            firstName = "first",
+            lastName = "last",
+            street = "street",
+            country = "country",
+            zip = "zip"
+        )
+
+        val expectedResult = Address(
+            firstName = "first",
+            lastName = "last",
+            street = "street",
+            country = "country",
+            zip = "zip",
+            id = "1")
+
+        Mockito.`when`(addressController.insert(addressCreateCommand))
+            .thenReturn(
+                expectedResult
+            )
+
+        withTestApplication({ module(addressController = addressController) }) {
+            handleRequest(HttpMethod.Post, "/addresses") {
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                setBody(objectMapper.writeValueAsString(addressCreateCommand))
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                assertEquals(expectedResult, objectMapper.readValue(response.content, Address::class.java))
+            }
+        }
+
+    }
 }

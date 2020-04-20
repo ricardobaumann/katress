@@ -24,6 +24,10 @@ allOpen {
     annotation("com.github.ricardobaumann.Open")
 }
 
+noArg {
+    annotation("com.github.ricardobaumann.NoArg")
+}
+
 group 'com.github.ricardobaumann'
 version '0.0.1'
 
