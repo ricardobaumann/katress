@@ -1,5 +1,6 @@
 package com.github.ricardobaumann
 
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -40,4 +41,10 @@ class AddressController {
                 }
             }
         }
+
+    fun delete(id: String) {
+        transaction {
+            Addresses.deleteWhere { Addresses.id eq id }
+        }
+    }
 }

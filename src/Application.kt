@@ -82,6 +82,13 @@ fun Application.module(testing: Boolean = false) {
         post("/addresses") {
             call.respond(addressController.insert(call.receive()))
         }
+
+        delete("/addresses/{id}") {
+            call.parameters["id"]?.let {
+                addressController.delete(it)
+                call.respond(HttpStatusCode.NoContent)
+            } ?: call.respond(HttpStatusCode.NotFound)
+        }
     }
 }
 
