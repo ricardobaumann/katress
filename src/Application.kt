@@ -52,11 +52,15 @@ fun Application.module(addressController: AddressController = AddressController(
         }
 
         install(StatusPages) {
-            exception<AuthenticationException> { _ ->
+            exception<AuthenticationException> {
                 call.respond(HttpStatusCode.Unauthorized)
             }
-            exception<AuthorizationException> { _ ->
+            exception<AuthorizationException> {
                 call.respond(HttpStatusCode.Forbidden)
+            }
+
+            exception<RuntimeException> {
+                call.respond(HttpStatusCode.BadRequest)
             }
 
         }

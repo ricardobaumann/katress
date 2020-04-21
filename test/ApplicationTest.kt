@@ -13,6 +13,7 @@ import io.ktor.jackson.*
 import kotlin.test.*
 import io.ktor.server.testing.*
 import org.mockito.Mockito
+import java.lang.RuntimeException
 
 class ApplicationTest {
     private val addressController = Mockito.mock(AddressController::class.java)
@@ -81,6 +82,29 @@ class ApplicationTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 assertEquals(expectedResult, objectMapper.readValue(response.content, Address::class.java))
+            }
+        }
+
+    }
+
+    @Test
+    fun testPostAddressFailure() {
+        val addressCreateCommand = AddressCreateCommand(
+            firstName = "first",
+            lastName = "last",
+            street = "street",
+            country = "country",
+            zip = "zip"
+        )
+
+        Mockito.doThrow(RuntimeException::class.java).`when`(addressController).insert(addressCreateCommand)
+
+        withTestApplication({ module(addressController = addressController) }) {
+            handleRequest(HttpMethod.Post, "/addresses") {
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                setBody(objectMapper.writeValueAsString(addressCreateCommand))
+            }.apply {
+                assertEquals(HttpStatusCode.BadRequest, response.status())
             }
         }
 
