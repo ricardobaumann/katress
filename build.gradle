@@ -6,6 +6,8 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
     }
 }
 
@@ -15,6 +17,16 @@ apply plugin: 'application'
 mainClassName = "io.ktor.server.netty.EngineMain"
 
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "kotlin-allopen"
+apply plugin: "kotlin-noarg"
+
+allOpen {
+    annotation("com.github.ricardobaumann.Open")
+}
+
+noArg {
+    annotation("com.github.ricardobaumann.NoArg")
+}
 
 group 'com.github.ricardobaumann'
 version '0.0.1'
@@ -46,6 +58,7 @@ dependencies {
     compile group: 'com.zaxxer', name: 'HikariCP', version: '3.2.0'
     compile 'org.jetbrains.exposed:exposed:0.17.6'
     runtime group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.3.3'
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
 }
 

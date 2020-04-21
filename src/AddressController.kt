@@ -1,12 +1,23 @@
 package com.github.ricardobaumann
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
+@Open
 class AddressController {
+
+    init {
+        val config = HikariConfig("/hikari.properties")
+        config.schema = "public"
+        val ds = HikariDataSource(config)
+        Database.connect(ds)
+    }
 
     fun getAll(): List<Address> = transaction {
         Addresses.selectAll().map {

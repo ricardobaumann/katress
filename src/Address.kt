@@ -1,6 +1,7 @@
 package com.github.ricardobaumann
 
-data class Address(
+@NoArg
+data class Address (
     val id: String,
     val firstName: String,
     val lastName: String,
